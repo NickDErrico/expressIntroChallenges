@@ -7,11 +7,10 @@ app.get('/hello', function(req, res) {
 });
 
 app.post('/create/:name', function(req, res) {
-  let nameObj = {
+  res.json({
     id: 1,
     name: req.params.name
-  }
-  res.json(nameObj);
+  })
 })
 
 app.get('/', function(req, res) {
@@ -19,7 +18,8 @@ app.get('/', function(req, res) {
 })
 
 app.get('/verify/:age', function(req, res) {
-  if (req.params.age > 13) {
+  let age = parseInt(req.params.age)
+  if (age > 13) {
     res.sendStatus(200)
   } else {
     res.sendStatus(403)

@@ -19,13 +19,13 @@ app.post('/create/:name/:age', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  fs.writeFile('./storage.json', JSON.stringify(dataAsArr), function(err) {
+  fs.readFile('./storage.json', 'utf-8', function(err) {
     res.json(JSON.parse(data));
   })
 });
 
 app.get('/:name', function(req, res) {
-  fs.writeFile('./storage.json', JSON.stringify(dataAsArr), function(err) {
+  fs.readFile('./storage.json', 'utf-8', function(err) {
     let parsedData = JSON.parse(data);
     let matchedUser = parsedData.filter((item) => {
       return item.name == req.params.name;
