@@ -6,34 +6,38 @@ let fs = require('fs');
 app.post('/create/:name/:age', function(req, res) {
   let nameAgeObj = {
     name: req.params.name,
-    age: req.params.age
+    age: parseInt(req.params.age)
   }
-  let currOutput = fs.readFileSync('./storage.json');
-  currOutput += JSON.stringify(nameAgeObj);
-  fs.writeFileSync('./storage.json', currOutput, function(err) {
-    if (err) {
-      throw err;
-    }
+  fs.readFile('./storage.json', 'utf-8', function(err, data) {
+    let dataAsArr = JSON.parse(data);
+
+    dataAsArr.push(nameAgeObj);
+    fs.writeFile('./storage.json', JSON.stringify(dataAsArr), function(err) {
+      res.sendStatus(200);
+    });
   })
-  res.send();
-})
+});
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/storage.json');
+  fs.writeFile('./storage.json', JSON.stringify(dataAsArr), function(err) {
+    res.json(JSON.parse(data));
+  })
 });
 
 app.get('/:name', function(req, res) {
-  let obj = fs.readFileSync('./storage.json', 'utf-8')
-  let parseObj = JSON.parse(obj);
+  fs.writeFile('./storage.json', JSON.stringify(dataAsArr), function(err) {
+    let parsedData = JSON.parse(data);
+    let matchedUser = parsedData.filter((item) => {
+      return item.name == req.params.name;
+    });
 
-  function nameMatch(arr, name) {
-    arr.filter((curr, item) => {
-      return item.name == name ? item : curr
-    }, res.sendStatus(400))[0]
-  }
-  res.send(nameMatch(parseObj, 'nick'))
-  res.end()
-})
+    if (matchedUser.length >= 1) {
+      res.json(matchedUser[0]);
+    } else {
+      res.sendStatus(400);
+    }
+  })
+});
 
 app.use(function(req, res) {
   res.sendStatus(404);
